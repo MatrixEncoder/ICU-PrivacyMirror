@@ -5,6 +5,7 @@ import asyncio
 import re
 import logging
 from osint_tools import osint_tools
+from mock_osint import mock_osint
 
 logger = logging.getLogger(__name__)
 
