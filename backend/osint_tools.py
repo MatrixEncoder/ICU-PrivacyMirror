@@ -67,7 +67,7 @@ class OSINTTools:
                     cmd, 
                     capture_output=True, 
                     text=True, 
-                    timeout=120  # 2 minutes timeout
+                    timeout=30  # 30 seconds timeout
                 )
                 
                 # Parse results
