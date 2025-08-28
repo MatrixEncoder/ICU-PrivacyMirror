@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import HeroSection from '../components/HeroSection';
-import AwarenessSection from '../components/AwarenessSection';
-import InteractiveMirror from '../components/InteractiveMirror';
-import FinalSection from '../components/FinalSection';
+import PrivacyChecker from '../components/PrivacyChecker';
+import InfoSections from '../components/InfoSections';
+import Footer from '../components/Footer';
 import ParticleBackground from '../components/ParticleBackground';
 import ScanLines from '../components/ScanLines';
 
@@ -32,10 +32,17 @@ const HomePage = () => {
       
       {/* Main Content */}
       <div className="relative z-10">
+        {/* Hero Section */}
         <HeroSection />
-        <AwarenessSection />
-        <InteractiveMirror />
-        <FinalSection />
+        
+        {/* Privacy Checker */}
+        <PrivacyChecker />
+        
+        {/* Information Sections */}
+        <InfoSections />
+        
+        {/* Footer */}
+        <Footer />
       </div>
     </div>
   );
