@@ -30,7 +30,7 @@ const AwarenessMessage = ({ message, animationType, delay }) => {
         return {
           initial: { width: 0, opacity: 0 },
           animate: isInView ? { width: "auto", opacity: 1 } : {},
-          transition: { duration: 1.5, delay, ease: "steps(20)" }
+          transition: { duration: 1.5, delay, ease: "easeInOut" }
         };
       case 'zoom':
         return {
