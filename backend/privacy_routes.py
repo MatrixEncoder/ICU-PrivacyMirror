@@ -53,30 +53,64 @@ async def check_privacy_exposure(request: PrivacyCheckRequest):
         results = {}
         
         # Run appropriate checks based on input type
-        if request.type == "email":
-            # Run Holehe for email
-            logger.info(f"Running Holehe check for email: {request.value}")
-            holehe_results = await osint_tools.check_holehe(request.value)
-            results['holehe'] = holehe_results
+        # Use mock data for demo purposes (faster and more reliable)
+        # In production, you can switch to real OSINT tools
+        USE_MOCK = True  # Set to False for real OSINT tools
+        
+        if USE_MOCK:
+            if request.type == "email":
+                # Use mock data for email
+                logger.info(f"Using mock Holehe check for email: {request.value}")
+                holehe_results = mock_osint.get_mock_holehe_results(request.value)
+                results['holehe'] = holehe_results
+                
+                # Also check username part
+                username_part = request.value.split('@')[0]
+                if len(username_part) >= 3:
+                    logger.info(f"Using mock Sherlock check for username part: {username_part}")
+                    sherlock_results = mock_osint.get_mock_sherlock_results(username_part)
+                    results['sherlock'] = sherlock_results
             
-            # Also check username part for Sherlock
-            username_part = request.value.split('@')[0]
-            if len(username_part) >= 3:  # Only check if username is meaningful
-                logger.info(f"Running Sherlock check for username part: {username_part}")
-                sherlock_results = await osint_tools.check_sherlock(username_part)
+            elif request.type == "username":
+                # Use mock data for username
+                logger.info(f"Using mock Sherlock check for username: {request.value}")
+                sherlock_results = mock_osint.get_mock_sherlock_results(request.value)
                 results['sherlock'] = sherlock_results
-        
-        elif request.type == "username":
-            # Run Sherlock for username
-            logger.info(f"Running Sherlock check for username: {request.value}")
-            sherlock_results = await osint_tools.check_sherlock(request.value)
-            results['sherlock'] = sherlock_results
-        
-        elif request.type == "domain":
-            # Run WHOIS for domain
-            logger.info(f"Running WHOIS check for domain: {request.value}")
-            whois_results = await osint_tools.check_whois(request.value)
-            results['whois'] = whois_results
+            
+            elif request.type == "domain":
+                # Use mock data for domain (but real WHOIS for demonstration)
+                logger.info(f"Running WHOIS check for domain: {request.value}")
+                whois_results = await osint_tools.check_whois(request.value)
+                if whois_results.get('error'):
+                    # Fallback to mock data if WHOIS fails
+                    whois_results = mock_osint.get_mock_whois_results(request.value)
+                results['whois'] = whois_results
+        else:
+            # Real OSINT tools (original implementation)
+            if request.type == "email":
+                # Run Holehe for email
+                logger.info(f"Running Holehe check for email: {request.value}")
+                holehe_results = await osint_tools.check_holehe(request.value)
+                results['holehe'] = holehe_results
+                
+                # Also check username part for Sherlock
+                username_part = request.value.split('@')[0]
+                if len(username_part) >= 3:  # Only check if username is meaningful
+                    logger.info(f"Running Sherlock check for username part: {username_part}")
+                    sherlock_results = await osint_tools.check_sherlock(username_part)
+                    results['sherlock'] = sherlock_results
+            
+            elif request.type == "username":
+                # Run Sherlock for username
+                logger.info(f"Running Sherlock check for username: {request.value}")
+                sherlock_results = await osint_tools.check_sherlock(request.value)
+                results['sherlock'] = sherlock_results
+            
+            elif request.type == "domain":
+                # Run WHOIS for domain
+                logger.info(f"Running WHOIS check for domain: {request.value}")
+                whois_results = await osint_tools.check_whois(request.value)
+                results['whois'] = whois_results
         
         # Calculate privacy exposure score
         score = osint_tools.calculate_privacy_score(results)
